@@ -4,6 +4,7 @@ module Bravo
   # valid key and signature that will last for a day.
   #
   class Wsaa
+    TA_EXPIRATION_TIME = 43200 # 12 hours
     # Main method for authentication and authorization.
     # When successful, produces the yaml file with auth data.
     #
@@ -23,7 +24,7 @@ module Bravo
     def self.build_tra
       now = (Time.now) - 120
       @from = now.strftime('%FT%T%:z')
-      @to   = (now + ((12 * 60 * 60))).strftime('%FT%T%:z')
+      @to   = (now + TA_EXPIRATION_TIME).strftime('%FT%T%:z')
       @id   = now.strftime('%s')
       tra  = <<-EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -89,6 +90,7 @@ XML
       yml = <<-YML
 token: #{certs[0]}
 sign: #{certs[1]}
+expire_at: #{Time.new + TA_EXPIRATION_TIME}
 YML
       `echo '#{ yml }' > /tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%Y_%m_%d') }.yml`
     end
