@@ -15,6 +15,10 @@ module Bravo
     '08' => 'Nota de Credito B',
     '09' => 'Recibos B',
     '10' => 'Notas de Venta al contado B',
+    '11' => 'Factura C',
+    '12' => 'Nota de Débito C',
+    '13' => 'Nota de Crédito C',
+    '15' => 'Recibo C',
     '34' => 'Cbtes. A del Anexo I, Apartado A,inc.f),R.G.Nro. 1415',
     '35' => 'Cbtes. B del Anexo I,Apartado A,inc. f),R.G. Nro. 1415',
     '39' => 'Otros comprobantes A que cumplan con R.G.Nro. 1415',
@@ -83,11 +87,21 @@ module Bravo
     receipt: '09'
   }
 
+  # This hash keeps the codes for C document types by operation
+  #
+  BILL_TYPE_C = {
+    invoice: '06',
+    debit:   '07',
+    credit:  '08',
+    receipt: '09'
+  }
+
   # This hash keeps the different types of bills
   #
   BILL_TYPE = {
     bill_a: BILL_TYPE_A,
-    bill_b: BILL_TYPE_B
+    bill_b: BILL_TYPE_B,
+    bill_c: BILL_TYPE_C
   }
 
   # This hash is used to validate the buyer condition and the bill type being issued.
@@ -101,6 +115,12 @@ module Bravo
       consumidor_final:        BILL_TYPE_B,
       exento:                  BILL_TYPE_B,
       responsable_monotributo: BILL_TYPE_B },
+    responsable_monotributo: {
+      responsable_inscripto:   BILL_TYPE_C,
+      consumidor_final:        BILL_TYPE_C,
+      exento:                  BILL_TYPE_C,
+      responsable_monotributo: BILL_TYPE_C
+    },
   }
 
   # This hash keeps the set of urls for wsaa and wsfe for production and testing envs
