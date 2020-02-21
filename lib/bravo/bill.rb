@@ -235,7 +235,7 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       def validate_iva_type(iva_type)
         valid_types = Bravo::ALIC_IVA.keys
         if valid_types.include? iva_type
-          if iva_type == :iva_0 and iva_condition == :responsable_inscripto
+          if iva_type == :iva_0 and iva_condition == :responsable_inscripto and Bravo.own_iva_cond != :responsable_monotributo 
             raise(NullOrInvalidAttribute.new,
               "En caso de responsable inscripto iva_type debe ser distinto de :iva_0")
           end

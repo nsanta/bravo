@@ -110,17 +110,18 @@ module Bravo
   #   `BILL_TYPE[:responsable_inscripto][:responsable_inscripto][:invoice]` #=> '01'
   #
   IVA_CONDITION = {
-    responsable_inscripto: {
-      responsable_inscripto:   BILL_TYPE_A,
-      consumidor_final:        BILL_TYPE_B,
-      exento:                  BILL_TYPE_B,
-      responsable_monotributo: BILL_TYPE_B },
-    responsable_monotributo: {
-      responsable_inscripto:   BILL_TYPE_C,
-      consumidor_final:        BILL_TYPE_C,
-      exento:                  BILL_TYPE_C,
-      responsable_monotributo: BILL_TYPE_C
-    },
+    :responsable_inscripto => {
+      :responsable_inscripto    => BILL_TYPE_A,
+      :consumidor_final         => BILL_TYPE_B,
+      :exento                   => BILL_TYPE_B,
+      :responsable_monotributo  => BILL_TYPE_B 
+    }
+    :responsable_monotributo => {
+      :responsable_inscripto    => BILL_TYPE_C,
+      :consumidor_final         => BILL_TYPE_C,
+      :exento                   => BILL_TYPE_C,
+      :responsable_monotributo  => BILL_TYPE_C 
+    } 
   }
 
   # This hash keeps the set of urls for wsaa and wsfe for production and testing envs
