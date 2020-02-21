@@ -115,7 +115,7 @@ module Bravo
       :consumidor_final         => BILL_TYPE_B,
       :exento                   => BILL_TYPE_B,
       :responsable_monotributo  => BILL_TYPE_B 
-    }
+    },
     :responsable_monotributo => {
       :responsable_inscripto    => BILL_TYPE_C,
       :consumidor_final         => BILL_TYPE_C,
