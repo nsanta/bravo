@@ -149,15 +149,15 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
           } } }
     end
 
-    #def validate_bill_type(type)
-      #valid_types = Bravo::BILL_TYPE.keys
-      #if valid_types.include? type
-       # type
-      #else
-       # raise(NullOrInvalidAttribute.new,
-        #  "El valor de iva_condition debe estar incluído en #{ valid_types }")
-      #end
-    #end
+    def validate_bill_type(type)
+      valid_types = Bravo::BILL_TYPE.keys
+      if valid_types.include? type
+        type
+      else
+        raise(NullOrInvalidAttribute.new,
+          "El valor de iva_condition debe estar incluído en #{ valid_types }")
+      end
+    end
 
     def setup_invoice_structure(invoice, cbte)
       detail = {}
@@ -198,7 +198,7 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
 
       def initialize(attrs = {})
         @iva_condition  = validate_iva_condition(attrs[:iva_condition])
-        @iva_type       = validate_iva_type(attrs[:iva_type])
+        @iva_type       = attrs[:iva_type]
         @total          = attrs[:total].round(2)|| 0.0
         @document_type  = attrs[:document_type] || Bravo.default_documento
         @currency       = attrs[:currency]      || Bravo.default_moneda
