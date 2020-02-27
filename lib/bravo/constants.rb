@@ -90,10 +90,10 @@ module Bravo
   # This hash keeps the codes for C document types by operation
   #
   BILL_TYPE_C = {
-    invoice: '06',
-    debit:   '07',
-    credit:  '08',
-    receipt: '09'
+    invoice: '11',
+    debit:   '12',
+    credit:  '13',
+    receipt: '15'
   }
 
   # This hash keeps the different types of bills
@@ -110,12 +110,6 @@ module Bravo
   #   `BILL_TYPE[:responsable_inscripto][:responsable_inscripto][:invoice]` #=> '01'
   #
   IVA_CONDITION = {
-    :responsable_inscripto => {
-      :responsable_inscripto    => BILL_TYPE_A,
-      :consumidor_final         => BILL_TYPE_B,
-      :exento                   => BILL_TYPE_B,
-      :responsable_monotributo  => BILL_TYPE_B 
-    },
     :responsable_monotributo => {
       :responsable_inscripto    => BILL_TYPE_C,
       :consumidor_final         => BILL_TYPE_C,

@@ -51,7 +51,7 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
         raise(NullOrInvalidAttribute.new, "The invoice doesn't correspond to this bill type")
       end
 
-      @batch << invoice if invoice.validate_invoice_attributes
+      @batch << invoice
     end
 
     # Files the authorization request to AFIP
@@ -163,19 +163,12 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       detail = {}
       detail['DocNro']    = invoice.document_number
       detail['ImpNeto']   = invoice.net_amount
-      detail['ImpIVA']    = invoice.iva_sum
+      #detail['ImpIVA']    = 0.00#invoice.iva_sum
       detail['ImpTotal']  = invoice.total
       detail['CbteDesde'] = detail['CbteHasta'] = cbte
       detail['Concepto']  = Bravo::CONCEPTOS[invoice.concept],
       detail['DocTipo']   = Bravo::DOCUMENTOS[invoice.document_type],
       detail['MonId']     = Bravo::MONEDAS[invoice.currency][:codigo],
-      detail['Iva'] = {
-        'AlicIva' => {
-          'Id' => invoice.applicable_iva_code,
-          'BaseImp' => invoice.net_amount,
-          'Importe' => invoice.iva_sum
-        }
-      }
       detail['CbteFch']     = today
       detail['ImpTotConc']  = 0.00
       detail['MonCotiz']    = 1
@@ -210,7 +203,7 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       # @return [Float] the sum of both fields, or 0 if the net is 0.
       #
       def net_amount
-        net = @total / (1 + applicable_iva_multiplier)
+        net = @total # / (1 + applicable_iva_multiplier)
         net.round(2)
       end
 
@@ -240,9 +233,9 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
               "En caso de responsable inscripto iva_type debe ser distinto de :iva_0")
           end
           iva_type
-        else
-          raise(NullOrInvalidAttribute.new,
-            "El valor de iva_type debe estar incluído en #{ valid_types }")
+        #else
+          #raise(NullOrInvalidAttribute.new,
+           # "El valor de iva_type debe estar incluído en #{ valid_types }")
         end
       end
 
@@ -251,7 +244,7 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       end
 
       def applicable_iva_code
-        applicable_iva[0]
+        #applicable_iva[0]
       end
 
       def applicable_iva_multiplier
