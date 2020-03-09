@@ -163,7 +163,7 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       detail = {}
       detail['DocNro']    = invoice.document_number
       detail['ImpNeto']   = invoice.net_amount
-      #detail['ImpIVA']    = 0.00#invoice.iva_sum
+      detail['ImpIVA']    = 0.00#invoice.iva_sum
       detail['ImpTotal']  = invoice.total
       detail['CbteDesde'] = detail['CbteHasta'] = cbte
       detail['Concepto']  = Bravo::CONCEPTOS[invoice.concept],
@@ -174,6 +174,13 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       detail['MonCotiz']    = 1
       detail['ImpOpEx']     = 0.00
       detail['ImpTrib']     = 0.00
+      detail['Iva'] = {
+        'AlicIva' => {
+          'Id' => '03',
+          'BaseImp' => invoice.net_amount,
+          'Importe' => 0.00
+        }
+      }
       unless invoice.concept == 0
         detail.merge!('FchServDesde'  => date_from  || today,
                       'FchServHasta'  => date_to    || today,
