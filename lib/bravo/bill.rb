@@ -63,7 +63,6 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
         # soap.namespaces['xmlns'] = 'http://ar.gov.afip.dif.FEV1/'
         soap.message body
       end
-
       setup_response(response.to_hash)
       self.authorized?
     end
@@ -163,28 +162,21 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       detail = {}
       detail['DocNro']    = invoice.document_number
       detail['ImpNeto']   = invoice.net_amount
-      detail['ImpIVA']    = 0.00#invoice.iva_sum
+      detail['ImpIVA']    = 0.00
       detail['ImpTotal']  = invoice.total
       detail['CbteDesde'] = detail['CbteHasta'] = cbte
       detail['Concepto']  = Bravo::CONCEPTOS[invoice.concept],
       detail['DocTipo']   = Bravo::DOCUMENTOS[invoice.document_type],
       detail['MonId']     = Bravo::MONEDAS[invoice.currency][:codigo],
-      detail['CbteFch']     = today
+      detail['CbteFch']     = invoice.invoice_date
       detail['ImpTotConc']  = 0.00
       detail['MonCotiz']    = 1
       detail['ImpOpEx']     = 0.00
       detail['ImpTrib']     = 0.00
-      detail['Iva'] = {
-        'AlicIva' => {
-          'Id' => '03',
-          'BaseImp' => invoice.net_amount,
-          'Importe' => 0.00
-        }
-      }
-      unless invoice.concept == 0
-        detail.merge!('FchServDesde'  => date_from  || today,
-                      'FchServHasta'  => date_to    || today,
-                      'FchVtoPago'    => due_date   || today)
+      unless invoice.concept == 'Productos'
+        detail.merge!('FchServDesde'  => invoice.date_from,
+                      'FchServHasta'  => invoice.date_to,
+                      'FchVtoPago'    => invoice.due_date)
       end
     end
 
@@ -194,15 +186,19 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
 
     class Invoice
       attr_accessor :total, :document_type, :document_number, :due_date, :aliciva_id, :date_from, :date_to,
-        :iva_condition, :concept, :currency
+        :iva_condition, :concept, :currency, :invoice_date
 
       def initialize(attrs = {})
         @iva_condition  = validate_iva_condition(attrs[:iva_condition])
-        @iva_type       = attrs[:iva_type]
+        @iva_type       = :iva_0
         @total          = attrs[:total].round(2)|| 0.0
         @document_type  = attrs[:document_type] || Bravo.default_documento
         @currency       = attrs[:currency]      || Bravo.default_moneda
         @concept        = attrs[:concept]       || Bravo.default_concepto
+        @invoice_date   = attrs[:invoice_date]  || Time.new.strftime('%Y%m%d')
+        @date_from   = attrs[:date_from]  || Time.new.strftime('%Y%m%d')
+        @date_to     = attrs[:date_to]    || Time.new.strftime('%Y%m%d')
+        @due_date    = attrs[:due_date]   || Time.new.strftime('%Y%m%d')
       end
 
       # Calculates the net amount for the invoice by substracting the iva from
