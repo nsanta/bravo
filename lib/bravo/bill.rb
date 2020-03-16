@@ -173,11 +173,11 @@ date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
       detail['MonCotiz']    = 1
       detail['ImpOpEx']     = 0.00
       detail['ImpTrib']     = 0.00
-      unless invoice.concept == 'Productoss'
-        detail.merge!('FchServDesde'  => invoice.date_from,
-                      'FchServHasta'  => invoice.date_to,
-                      'FchVtoPago'    => invoice.due_date)
-      end
+      detail.merge!(
+        'FchServDesde'  => invoice.concept === 'Productos' ? nil : invoice.date_from,
+        'FchServHasta'  => invoice.concept === 'Productos' ? nil : invoice.date_to,
+        'FchVtoPago'    => invoice.concept === 'Productos' ? nil : invoice.due_date
+      )
     end
 
     def today
